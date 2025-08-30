@@ -32,9 +32,6 @@ const Superpanel = () => {
 
   const categories = [
     { id: 'curriculum', label: 'Curriculum & Teaching', icon: '📚', color: 'purple', description: 'Educational content & methods' },
-    { id: 'resources', label: 'Resources & Materials', icon: '🎨', color: 'green', description: 'Tools & learning materials' },
-    { id: 'training', label: 'Training & Development', icon: '🎯', color: 'orange', description: 'Staff growth & skills' },
-    { id: 'welfare', label: 'Student Welfare', icon: '💝', color: 'pink', description: 'Child wellbeing & safety' },
     { id: 'admin', label: 'Administration', icon: '📋', color: 'blue', description: 'Operational matters' },
     { id: 'other', label: 'Other Suggestions', icon: '💡', color: 'yellow', description: 'General improvements' }
   ];
@@ -214,7 +211,7 @@ const Superpanel = () => {
           {/* Main Form Container */}
           <div className="bg-white/95 backdrop-blur-lg rounded-3xl shadow-2xl p-8 lg:p-12">
             {/* Category Selection Grid */}
-            <div className="mb-10">
+            {/*<div className="mb-10">
               <h2 className="text-2xl lg:text-3xl font-bold text-gray-800 mb-6 text-center">
                 What would you like to discuss?
               </h2>
@@ -249,7 +246,7 @@ const Superpanel = () => {
                   </button>
                 ))}
               </div>
-            </div>
+            </div>*/}
 
             <div className="space-y-8">
               {/* Title Input */}
