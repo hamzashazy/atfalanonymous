@@ -114,7 +114,7 @@ const Superpanel = () => {
     setIsSubmitting(true);
     
     try {
-      const response = await fetch('http://localhost:5000/api/message/', {
+      const response = await fetch('https://atfalanonymous-backend.vercel.app/api/message/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)
@@ -203,10 +203,10 @@ const Superpanel = () => {
             {/* Live Statistics */}
             <div className="flex flex-wrap justify-center items-center gap-4 lg:gap-8">
               <div className="bg-gradient-to-r from-green-500 to-teal-500 text-white px-6 py-3 rounded-full text-lg lg:text-xl font-bold shadow-lg transform hover:scale-110 transition-transform">
-                <span className="animate-pulse">🔥</span> {messageCount.toLocaleString()} voices shared
+                <span className="animate-pulse">🕵️‍♂️</span>  Conversations in the shadows
               </div>
               <div className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-3 rounded-full text-lg lg:text-xl font-bold shadow-lg transform hover:scale-110 transition-transform">
-                <span>🌍</span> 50+ Locations Active
+                <span>🌍</span> 15+ Locations Active
               </div>
             </div>
           </div>
