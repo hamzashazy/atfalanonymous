@@ -1,54 +1,71 @@
-import React, { useState, useEffect } from 'react';
-import { Search, RefreshCw, Grid, List, MessageSquare, Hash, AlertCircle, Inbox } from 'lucide-react';
+import React, { useState, useEffect } from "react";
+import {
+  Search,
+  RefreshCw,
+  Grid,
+  List,
+  MessageSquare,
+  Hash,
+  AlertCircle,
+  Inbox,
+} from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { LogOut } from "lucide-react";
 
 const AdminViewMessages = () => {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [viewMode, setViewMode] = useState('cards');
-  const [searchTerm, setSearchTerm] = useState('');
-  const [sortOrder, setSortOrder] = useState('newest');
+  const [viewMode, setViewMode] = useState("cards");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [sortOrder, setSortOrder] = useState("newest");
   const [refreshing, setRefreshing] = useState(false);
 
-  useEffect(() => {
-    fetchMessages();
-  }, []);
+  const navigate = useNavigate(); // ✅ for redirecting
+
+  const handleLogout = () => {
+    localStorage.removeItem("token"); // clear token
+    navigate("/login"); // redirect to login page
+  };
 
   const fetchMessages = async () => {
     setLoading(true);
     setError(null);
 
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem("token");
       if (!token) {
-        setError('Authentication token not found. Please log in again.');
+        setError("Authentication token not found. Please log in again.");
         setLoading(false);
         return;
       }
 
       const response = await fetch(
-        'https://atfalanonymous-backend.vercel.app/api/message/',
+        "https://atfalanonymous-backend.vercel.app/api/message/",
         {
           headers: {
             Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
         }
       );
 
       if (!response.ok) {
-        throw new Error('Failed to fetch messages');
+        throw new Error("Failed to fetch messages");
       }
 
       const data = await response.json();
       setMessages(Array.isArray(data) ? data : []);
     } catch (err) {
-      setError('Unable to load messages. Please try again later.');
-      console.error('Error fetching messages:', err);
+      setError("Unable to load messages. Please try again later.");
+      console.error("Error fetching messages:", err);
     } finally {
       setLoading(false);
     }
   };
+  useEffect(() => {
+    fetchMessages();
+  }, []);
 
   const filteredMessages = messages.filter(
     (msg) =>
@@ -57,7 +74,7 @@ const AdminViewMessages = () => {
   );
 
   const sortedMessages = [...filteredMessages].sort((a, b) => {
-    if (sortOrder === 'newest') {
+    if (sortOrder === "newest") {
       return (b.id || 0) - (a.id || 0);
     }
     return (a.id || 0) - (b.id || 0);
@@ -71,9 +88,9 @@ const AdminViewMessages = () => {
 
   const exportToPDF = () => {
     try {
-      const win = window.open('', '_blank');
+      const win = window.open("", "_blank");
       if (!win) return;
-  
+
       const styles = `
         <style>
           body {
@@ -99,21 +116,25 @@ const AdminViewMessages = () => {
           }
         </style>
       `;
-  
+
       const head = `
         <tr>
           <th>Title</th>
           <th>Message</th>
         </tr>
       `;
-  
-      const rows = sortedMessages.map(m => `
+
+      const rows = sortedMessages
+        .map(
+          (m) => `
         <tr>
-          <td>${m.title || 'Untitled'}</td>
-          <td>${m.message || 'No message content'}</td>
+          <td>${m.title || "Untitled"}</td>
+          <td>${m.message || "No message content"}</td>
         </tr>
-      `).join('');
-  
+      `
+        )
+        .join("");
+
       win.document.write(`
         <!doctype html>
         <html>
@@ -124,49 +145,49 @@ const AdminViewMessages = () => {
           </body>
         </html>
       `);
-  
+
       win.document.close();
       win.focus();
       win.print();
     } catch (e) {
-      console.error('PDF export failed', e);
-      setError('Failed to export PDF');
+      console.error("PDF export failed", e);
+      setError("Failed to export PDF");
     }
   };
-  
 
   const exportToCSV = () => {
     try {
       const headers = ["Title", "Message"];
-      const rows = sortedMessages.map(m => [
+      const rows = sortedMessages.map((m) => [
         m.title || "Untitled",
         m.message || "No message content",
       ]);
-  
+
       const escapeCell = (v) => {
         const s = String(v ?? "");
         return /[",\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
       };
-  
+
       const csv = [headers, ...rows]
-        .map(r => r.map(escapeCell).join(','))
-        .join('\n');
-  
-      const blob = new Blob(["\uFEFF" + csv], { type: 'text/csv;charset=utf-8;' });
+        .map((r) => r.map(escapeCell).join(","))
+        .join("\n");
+
+      const blob = new Blob(["\uFEFF" + csv], {
+        type: "text/csv;charset=utf-8;",
+      });
       const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
+      const a = document.createElement("a");
       a.href = url;
-      a.download = 'messages.csv';
+      a.download = "messages.csv";
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
     } catch (e) {
-      console.error('CSV export failed', e);
-      setError('Failed to export CSV');
+      console.error("CSV export failed", e);
+      setError("Failed to export CSV");
     }
   };
-  
 
   if (loading) {
     return (
@@ -176,7 +197,9 @@ const AdminViewMessages = () => {
             <div className="w-20 h-20 border-4 border-blue-200 rounded-full animate-pulse"></div>
             <div className="w-20 h-20 border-4 border-transparent border-t-blue-600 rounded-full animate-spin absolute top-0 left-0"></div>
           </div>
-          <p className="text-lg font-semibold text-gray-700 mt-4 animate-pulse">Loading messages...</p>
+          <p className="text-lg font-semibold text-gray-700 mt-4 animate-pulse">
+            Loading messages...
+          </p>
         </div>
       </div>
     );
@@ -197,7 +220,9 @@ const AdminViewMessages = () => {
                 <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
                   Atfal Educational Institute
                 </h1>
-                <p className="text-base text-gray-600 font-medium mt-1">Admin Message Center 📚</p>
+                <p className="text-base text-gray-600 font-medium mt-1">
+                  Admin Message Center 📚
+                </p>
               </div>
             </div>
             <div className="flex items-center gap-3">
@@ -205,6 +230,15 @@ const AdminViewMessages = () => {
                 {messages.length} Messages
               </div>
               <div className="text-2xl animate-pulse">✨</div>
+
+              {/* ✅ Logout button */}
+              <button
+                onClick={handleLogout}
+                className="ml-4 px-4 py-2 bg-gradient-to-r from-red-500 to-pink-500 text-white rounded-xl hover:from-red-600 hover:to-pink-600 transition-all duration-300 flex items-center gap-2 font-semibold shadow-lg hover:shadow-xl transform hover:scale-105"
+              >
+                <LogOut className="h-5 w-5" />
+                Logout
+              </button>
             </div>
           </div>
         </div>
@@ -239,21 +273,21 @@ const AdminViewMessages = () => {
             {/* View Mode */}
             <div className="flex bg-gradient-to-r from-blue-100 to-indigo-100 rounded-xl p-1.5 shadow-inner">
               <button
-                onClick={() => setViewMode('cards')}
+                onClick={() => setViewMode("cards")}
                 className={`px-4 py-2 rounded-lg font-semibold transition-all duration-300 flex items-center gap-2 ${
-                  viewMode === 'cards'
-                    ? 'bg-white text-blue-600 shadow-lg transform scale-105'
-                    : 'text-gray-600 hover:text-blue-600'
+                  viewMode === "cards"
+                    ? "bg-white text-blue-600 shadow-lg transform scale-105"
+                    : "text-gray-600 hover:text-blue-600"
                 }`}
               >
                 <Grid className="w-4 h-4" /> Cards
               </button>
               <button
-                onClick={() => setViewMode('table')}
+                onClick={() => setViewMode("table")}
                 className={`px-4 py-2 rounded-lg font-semibold transition-all duration-300 flex items-center gap-2 ${
-                  viewMode === 'table'
-                    ? 'bg-white text-blue-600 shadow-lg transform scale-105'
-                    : 'text-gray-600 hover:text-blue-600'
+                  viewMode === "table"
+                    ? "bg-white text-blue-600 shadow-lg transform scale-105"
+                    : "text-gray-600 hover:text-blue-600"
                 }`}
               >
                 <List className="w-4 h-4" /> Table
@@ -265,7 +299,9 @@ const AdminViewMessages = () => {
               onClick={handleRefresh}
               className="px-5 py-3 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-xl hover:from-blue-600 hover:to-indigo-600 transition-all duration-300 flex items-center gap-2 font-semibold shadow-lg hover:shadow-xl transform hover:scale-105"
             >
-              <RefreshCw className={`h-5 w-5 ${refreshing ? 'animate-spin' : ''}`} />
+              <RefreshCw
+                className={`h-5 w-5 ${refreshing ? "animate-spin" : ""}`}
+              />
               Refresh
             </button>
           </div>
@@ -301,14 +337,16 @@ const AdminViewMessages = () => {
           ) : sortedMessages.length === 0 ? (
             <div className="bg-white rounded-2xl shadow-xl p-16 text-center border-2 border-blue-100">
               <Inbox className="h-20 w-20 text-blue-300 mx-auto mb-4" />
-              <p className="text-gray-600 text-xl font-bold">No messages found</p>
+              <p className="text-gray-600 text-xl font-bold">
+                No messages found
+              </p>
               <p className="text-gray-400 text-lg mt-2">
                 {searchTerm
-                  ? 'Try adjusting your search terms 🔍'
-                  : 'Messages will appear here when submitted ✨'}
+                  ? "Try adjusting your search terms 🔍"
+                  : "Messages will appear here when submitted ✨"}
               </p>
             </div>
-          ) : viewMode === 'cards' ? (
+          ) : viewMode === "cards" ? (
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               {sortedMessages.map((msg, index) => (
                 <div
@@ -317,14 +355,14 @@ const AdminViewMessages = () => {
                 >
                   <div className="flex items-start justify-between mb-4">
                     <h3 className="text-xl font-bold text-gray-800 line-clamp-2">
-                      {msg.title || 'Untitled'}
+                      {msg.title || "Untitled"}
                     </h3>
                     <span className="text-sm font-bold text-blue-500 ml-2 flex-shrink-0 bg-blue-50 px-2 py-1 rounded-lg">
                       #{msg.id || index + 1}
                     </span>
                   </div>
                   <p className="text-gray-600 text-base leading-relaxed font-medium">
-                    {msg.message || 'No message content'}
+                    {msg.message || "No message content"}
                   </p>
                 </div>
               ))}
@@ -359,12 +397,12 @@ const AdminViewMessages = () => {
                         </td>
                         <td className="px-6 py-4">
                           <div className="text-base font-semibold text-gray-900 max-w-xs truncate">
-                            {msg.title || 'Untitled'}
+                            {msg.title || "Untitled"}
                           </div>
                         </td>
                         <td className="px-6 py-4">
                           <div className="text-sm text-gray-600 max-w-md font-medium">
-                            {msg.message || 'No message content'}
+                            {msg.message || "No message content"}
                           </div>
                         </td>
                       </tr>

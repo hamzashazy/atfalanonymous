@@ -1,13 +1,21 @@
 import React from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import "./App.css";
 import Superlogin from "./components/login/superlogin.jsx";
 import Superpanel from "./components/superpanel.jsx";
 import AdminViewMessages from "./components/admin.jsx";
+
 const ProtectedRoute1 = ({ children }) => {
   const isLogged = localStorage.getItem("isLogged") === "true";
-  return isLogged ? children : <Navigate to="/login" />;
+  const location = useLocation();
+
+  return isLogged ? (
+    children
+  ) : (
+    <Navigate to="/login" state={{ from: location }} replace />
+  );
 };
+
 
 export default function App() {
   return (

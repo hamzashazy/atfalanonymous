@@ -1,47 +1,68 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 
 const Superpanel = () => {
   const [formData, setFormData] = useState({
-    title: '',
-    message: '',
-    category: ''
+    title: "",
+    message: "",
+    // category: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState({
     show: false,
-    type: '',
-    message: ''
+    type: "",
+    message: "",
   });
   const [currentQuote, setCurrentQuote] = useState(0);
-  const [hoveredCategory, setHoveredCategory] = useState(null);
-  const [messageCount, setMessageCount] = useState(0);
-  const [colorTheme, setColorTheme] = useState('blue');
+  // const [hoveredCategory, setHoveredCategory] = useState(null);
+  const [colorTheme, setColorTheme] = useState("blue");
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [isTyping, setIsTyping] = useState(false);
   const [particlesVisible, setParticlesVisible] = useState(false);
 
   const quotes = [
-    { text: "Your voice matters. Every suggestion shapes a better tomorrow for our children.", author: "Anonymous" },
-    { text: "In the spirit of growth, we speak. In the spirit of unity, we listen.", author: "Tarbiyah Wisdom" },
-    { text: "Small changes create ripples that transform entire communities.", author: "Educational Leader" },
-    { text: "Behind every improvement is someone brave enough to speak up.", author: "Change Maker" },
-    { text: "Together, we build bridges of understanding and excellence.", author: "Community Voice" },
-    { text: "Every feedback is a gift that helps us grow stronger together.", author: "Team Leader" },
-    { text: "Your anonymous voice creates visible change.", author: "Development Officer" }
+    {
+      text: "Your voice matters. Every suggestion shapes a better tomorrow for our children.",
+      author: "Anonymous",
+    },
+    {
+      text: "In the spirit of growth, we speak. In the spirit of unity, we listen.",
+      author: "Tarbiyah Wisdom",
+    },
+    {
+      text: "Small changes create ripples that transform entire communities.",
+      author: "Educational Leader",
+    },
+    {
+      text: "Behind every improvement is someone brave enough to speak up.",
+      author: "Change Maker",
+    },
+    {
+      text: "Together, we build bridges of understanding and excellence.",
+      author: "Community Voice",
+    },
+    {
+      text: "Every feedback is a gift that helps us grow stronger together.",
+      author: "Team Leader",
+    },
+    {
+      text: "Your anonymous voice creates visible change.",
+      author: "Development Officer",
+    },
   ];
 
-  const categories = [
-    { id: 'curriculum', label: 'Curriculum & Teaching', icon: '📚', color: 'purple', description: 'Educational content & methods' },
-    { id: 'admin', label: 'Administration', icon: '📋', color: 'blue', description: 'Operational matters' },
-    { id: 'other', label: 'Other Suggestions', icon: '💡', color: 'yellow', description: 'General improvements' }
-  ];
+  // const categories = [
+  //   { id: 'curriculum', label: 'Curriculum & Teaching', icon: '📚', color: 'purple', description: 'Educational content & methods' },
+  //   { id: 'admin', label: 'Administration', icon: '📋', color: 'blue', description: 'Operational matters' },
+  //   { id: 'other', label: 'Other Suggestions', icon: '💡', color: 'yellow', description: 'General improvements' }
+  // ];
 
   const themes = {
-    blue: 'from-blue-500 via-cyan-400 to-teal-400',
-    purple: 'from-purple-500 via-pink-400 to-rose-400',
-    green: 'from-green-500 via-emerald-400 to-teal-400',
-    orange: 'from-orange-500 via-amber-400 to-yellow-400',
-    rainbow: 'from-red-400 via-yellow-400 via-green-400 via-blue-400 to-purple-400'
+    blue: "from-blue-500 via-cyan-400 to-teal-400",
+    purple: "from-purple-500 via-pink-400 to-rose-400",
+    green: "from-green-500 via-emerald-400 to-teal-400",
+    orange: "from-orange-500 via-amber-400 to-yellow-400",
+    rainbow:
+      "from-red-400 via-yellow-400 via-green-400 via-blue-400 to-purple-400",
   };
 
   useEffect(() => {
@@ -52,32 +73,27 @@ const Superpanel = () => {
   }, []);
 
   useEffect(() => {
-    const count = Math.floor(Math.random() * 500) + 1500;
-    setMessageCount(count);
-    
-    // Increment counter animation
-    const timer = setInterval(() => {
-      setMessageCount(prev => prev + Math.floor(Math.random() * 3));
-    }, 30000);
-    
-    return () => clearInterval(timer);
+    document.documentElement.classList.add("superpanel-page");
+    return () => {
+      document.documentElement.classList.remove("superpanel-page");
+    };
   }, []);
 
   useEffect(() => {
     const handleMouseMove = (e) => {
       setMousePosition({ x: e.clientX, y: e.clientY });
     };
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
   }, []);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
-    
+
     if (value.length > 0 && !isTyping) {
       setIsTyping(true);
       setParticlesVisible(true);
@@ -87,66 +103,79 @@ const Superpanel = () => {
     }
   };
 
-  const handleCategorySelect = (categoryId) => {
-    setFormData(prev => ({
-      ...prev,
-      category: categoryId
-    }));
-    // Trigger a small celebration animation
-    setParticlesVisible(true);
-    setTimeout(() => setParticlesVisible(false), 1000);
-  };
+  // const handleCategorySelect = (categoryId) => {
+  //   setFormData(prev => ({
+  //     ...prev,
+  //     category: categoryId
+  //   }));
+  //   // Trigger a small celebration animation
+  //   setParticlesVisible(true);
+  //   setTimeout(() => setParticlesVisible(false), 1000);
+  // };
 
   const handleSubmit = async () => {
-    if (!formData.title.trim() || !formData.message.trim() || !formData.category) {
+    // if (!formData.title.trim() || !formData.message.trim() || !formData.category) {
+    if (!formData.title.trim() || !formData.message.trim()) {
       setSubmitStatus({
         show: true,
-        type: 'error',
-        message: '⚠️ Please complete all fields and select a category to share your voice'
+        type: "error",
+        message: "⚠️ Please complete all fields to share your voice",
       });
-      setTimeout(() => setSubmitStatus({ show: false, type: '', message: '' }), 4000);
+      setTimeout(
+        () => setSubmitStatus({ show: false, type: "", message: "" }),
+        4000
+      );
       return;
     }
 
     setIsSubmitting(true);
-    
+
     try {
-      const response = await fetch('https://atfalanonymous-backend.vercel.app/api/message/', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
-      });
+      const response = await fetch(
+        "https://atfalanonymous-backend.vercel.app/api/message/",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData),
+        }
+      );
 
       if (response.ok) {
         setSubmitStatus({
           show: true,
-          type: 'success',
-          message: '🎉 Success! Your voice has been heard and will make a difference!'
+          type: "success",
+          message:
+            "🎉 Success! Your voice has been heard and will make a difference!",
         });
-        setFormData({ title: '', message: '', category: '' });
-        setMessageCount(prev => prev + 1);
+        // setFormData({ title: '', message: '', category: '' });
+        setFormData({ title: "", message: "" });
         setParticlesVisible(true);
         setTimeout(() => setParticlesVisible(false), 3000);
       } else {
-        throw new Error('Failed to submit message');
+        throw new Error("Failed to submit message");
       }
     } catch (error) {
       setSubmitStatus({
         show: true,
-        type: 'error',
-        message: '❌ Connection issue. Please try again in a moment.'
+        type: "error",
+        message: "❌ Connection issue. Please try again in a moment.",
       });
     } finally {
       setIsSubmitting(false);
-      setTimeout(() => setSubmitStatus({ show: false, type: '', message: '' }), 6000);
+      setTimeout(
+        () => setSubmitStatus({ show: false, type: "", message: "" }),
+        6000
+      );
     }
   };
 
   return (
-    <div className={`min-h-screen bg-gradient-to-br ${themes[colorTheme]} relative overflow-hidden`}>
+    <div
+      className={`superpanel min-h-screen bg-gradient-to-br ${themes[colorTheme]} relative overflow-hidden`}
+    >
       {/* Interactive Background Elements */}
       <div className="absolute inset-0">
-        <div 
+        <div
           className="absolute w-96 h-96 bg-white/10 rounded-full blur-3xl animate-pulse"
           style={{
             left: `${mousePosition.x * 0.05}px`,
@@ -155,7 +184,7 @@ const Superpanel = () => {
         />
         <div className="absolute top-1/4 right-1/4 w-80 h-80 bg-white/10 rounded-full blur-3xl animate-pulse delay-1000" />
         <div className="absolute bottom-1/4 left-1/4 w-72 h-72 bg-white/10 rounded-full blur-3xl animate-pulse delay-500" />
-        
+
         {/* Celebration particles */}
         {particlesVisible && (
           <div className="absolute inset-0 pointer-events-none">
@@ -167,7 +196,7 @@ const Superpanel = () => {
                   left: `${Math.random() * 100}%`,
                   top: `${Math.random() * 100}%`,
                   animationDelay: `${Math.random() * 2}s`,
-                  animationDuration: `${3 + Math.random() * 2}s`
+                  animationDuration: `${3 + Math.random() * 2}s`,
                 }}
               />
             ))}
@@ -180,9 +209,9 @@ const Superpanel = () => {
           {/* Enhanced Header */}
           <div className="text-center mb-10 bg-white/95 backdrop-blur-lg rounded-3xl p-8 lg:p-12 shadow-2xl transform hover:scale-[1.01] transition-transform duration-300">
             <h1 className="text-5xl lg:text-7xl font-black bg-gradient-to-r from-purple-600 via-blue-600 to-cyan-600 bg-clip-text text-transparent mb-6 animate-gradient">
-              Atfal Voice Portal
+              Anonymous Voice Portal
             </h1>
-            
+
             <p className="text-xl lg:text-2xl text-gray-600 mb-8 font-medium">
               Your Safe Space for Anonymous Feedback & Suggestions
             </p>
@@ -193,14 +222,17 @@ const Superpanel = () => {
                 <p className="text-xl lg:text-2xl text-gray-700 italic font-light transition-all duration-1000 ease-in-out">
                   "{quotes[currentQuote].text}"
                 </p>
-                <p className="text-lg text-gray-500 mt-3 font-medium">— {quotes[currentQuote].author}</p>
+                <p className="text-lg text-gray-500 mt-3 font-medium">
+                  — {quotes[currentQuote].author}
+                </p>
               </div>
             </div>
 
             {/* Live Statistics */}
             <div className="flex flex-wrap justify-center items-center gap-4 lg:gap-8">
               <div className="bg-gradient-to-r from-green-500 to-teal-500 text-white px-6 py-3 rounded-full text-lg lg:text-xl font-bold shadow-lg transform hover:scale-110 transition-transform">
-                <span className="animate-pulse">🕵️‍♂️</span>  Conversations in the shadows
+                <span className="animate-pulse">🕵️‍♂️</span> Conversations in the
+                shadows
               </div>
               <div className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-3 rounded-full text-lg lg:text-xl font-bold shadow-lg transform hover:scale-110 transition-transform">
                 <span>🌍</span> 15+ Locations Active
@@ -251,7 +283,10 @@ const Superpanel = () => {
             <div className="space-y-8">
               {/* Title Input */}
               <div className="group">
-                <label htmlFor="title" className="block text-xl lg:text-2xl font-bold text-gray-800 mb-4">
+                <label
+                  htmlFor="title"
+                  className="block text-xl lg:text-2xl font-bold text-gray-800 mb-4"
+                >
                   Give your message a title
                 </label>
                 <input
@@ -271,7 +306,10 @@ const Superpanel = () => {
 
               {/* Message Textarea */}
               <div className="group">
-                <label htmlFor="message" className="block text-xl lg:text-2xl font-bold text-gray-800 mb-4">
+                <label
+                  htmlFor="message"
+                  className="block text-xl lg:text-2xl font-bold text-gray-800 mb-4"
+                >
                   Share your thoughts in detail
                 </label>
                 <textarea
@@ -279,7 +317,7 @@ const Superpanel = () => {
                   name="message"
                   value={formData.message}
                   onChange={handleInputChange}
-                  placeholder="Tell us what's on your mind. Your feedback helps us improve our programs for all Atfal members across the country..."
+                  placeholder="Tell us what's on your mind. Your feedback helps us improve our programs for all orgranization members across the country..."
                   rows="8"
                   className="w-full px-6 py-4 lg:px-8 lg:py-5 text-lg lg:text-xl border-3 border-gray-200 rounded-2xl focus:ring-4 focus:ring-purple-300 focus:border-purple-500 outline-none transition-all duration-300 text-gray-700 placeholder-gray-400 resize-none group-hover:shadow-lg"
                   maxLength="2000"
@@ -302,8 +340,12 @@ const Superpanel = () => {
                           key={theme}
                           type="button"
                           onClick={() => setColorTheme(theme)}
-                          className={`w-8 h-8 rounded-full bg-gradient-to-r ${themes[theme]} transform hover:scale-125 transition-all ${
-                            colorTheme === theme ? 'ring-4 ring-offset-2 ring-gray-400 scale-125' : ''
+                          className={`w-8 h-8 rounded-full bg-gradient-to-r ${
+                            themes[theme]
+                          } transform hover:scale-125 transition-all ${
+                            colorTheme === theme
+                              ? "ring-4 ring-offset-2 ring-gray-400 scale-125"
+                              : ""
                           }`}
                           title={`Switch to ${theme} theme`}
                         />
@@ -319,15 +361,30 @@ const Superpanel = () => {
                 disabled={isSubmitting}
                 className={`w-full py-6 lg:py-8 px-8 rounded-2xl text-xl lg:text-2xl font-bold text-white transition-all duration-300 transform ${
                   isSubmitting
-                    ? 'bg-gray-400 cursor-not-allowed'
-                    : 'bg-gradient-to-r from-purple-600 via-blue-600 to-cyan-600 hover:from-purple-700 hover:via-blue-700 hover:to-cyan-700 hover:scale-[1.02] hover:shadow-2xl active:scale-95 animate-gradient'
+                    ? "bg-gray-400 cursor-not-allowed"
+                    : "bg-gradient-to-r from-purple-600 via-blue-600 to-cyan-600 hover:from-purple-700 hover:via-blue-700 hover:to-cyan-700 hover:scale-[1.02] hover:shadow-2xl active:scale-95 animate-gradient"
                 } shadow-xl`}
               >
                 {isSubmitting ? (
                   <span className="flex items-center justify-center">
-                    <svg className="animate-spin h-8 w-8 mr-4" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                    <svg
+                      className="animate-spin h-8 w-8 mr-4"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                        fill="none"
+                      />
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      />
                     </svg>
                     Sending Your Anonymous Message...
                   </span>
@@ -343,14 +400,20 @@ const Superpanel = () => {
 
             {/* Status Message */}
             {submitStatus.show && (
-              <div className={`mt-8 p-6 rounded-2xl animate-slide-up ${
-                submitStatus.type === 'success' 
-                  ? 'bg-gradient-to-r from-green-50 via-emerald-50 to-teal-50 border-3 border-green-400' 
-                  : 'bg-gradient-to-r from-red-50 via-orange-50 to-yellow-50 border-3 border-red-400'
-              }`}>
-                <p className={`text-xl lg:text-2xl font-bold text-center ${
-                  submitStatus.type === 'success' ? 'text-green-800' : 'text-red-800'
-                }`}>
+              <div
+                className={`mt-8 p-6 rounded-2xl animate-slide-up ${
+                  submitStatus.type === "success"
+                    ? "bg-gradient-to-r from-green-50 via-emerald-50 to-teal-50 border-3 border-green-400"
+                    : "bg-gradient-to-r from-red-50 via-orange-50 to-yellow-50 border-3 border-red-400"
+                }`}
+              >
+                <p
+                  className={`text-xl lg:text-2xl font-bold text-center ${
+                    submitStatus.type === "success"
+                      ? "text-green-800"
+                      : "text-red-800"
+                  }`}
+                >
                   {submitStatus.message}
                 </p>
               </div>
@@ -362,18 +425,30 @@ const Superpanel = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
               <div className="transform hover:scale-110 transition-transform">
                 <span className="text-5xl lg:text-6xl block mb-3">🔒</span>
-                <h3 className="text-xl lg:text-2xl font-bold text-gray-800 mb-2">100% Anonymous</h3>
-                <p className="text-base lg:text-lg text-gray-600">Your identity is completely protected</p>
+                <h3 className="text-xl lg:text-2xl font-bold text-gray-800 mb-2">
+                  100% Anonymous
+                </h3>
+                <p className="text-base lg:text-lg text-gray-600">
+                  Your identity is completely protected
+                </p>
               </div>
               <div className="transform hover:scale-110 transition-transform">
                 <span className="text-5xl lg:text-6xl block mb-3">🌍</span>
-                <h3 className="text-xl lg:text-2xl font-bold text-gray-800 mb-2">Nationwide Impact</h3>
-                <p className="text-base lg:text-lg text-gray-600">Your feedback reaches all branches</p>
+                <h3 className="text-xl lg:text-2xl font-bold text-gray-800 mb-2">
+                  Nationwide Impact
+                </h3>
+                <p className="text-base lg:text-lg text-gray-600">
+                  Your feedback reaches all branches
+                </p>
               </div>
               <div className="transform hover:scale-110 transition-transform">
                 <span className="text-5xl lg:text-6xl block mb-3">💪</span>
-                <h3 className="text-xl lg:text-2xl font-bold text-gray-800 mb-2">Make a Difference</h3>
-                <p className="text-base lg:text-lg text-gray-600">Every voice shapes our future</p>
+                <h3 className="text-xl lg:text-2xl font-bold text-gray-800 mb-2">
+                  Make a Difference
+                </h3>
+                <p className="text-base lg:text-lg text-gray-600">
+                  Every voice shapes our future
+                </p>
               </div>
             </div>
           </div>
@@ -392,7 +467,8 @@ const Superpanel = () => {
           }
         }
         @keyframes float {
-          0%, 100% {
+          0%,
+          100% {
             transform: translateY(0) scale(1);
             opacity: 1;
           }
@@ -402,7 +478,8 @@ const Superpanel = () => {
           }
         }
         @keyframes gradient {
-          0%, 100% {
+          0%,
+          100% {
             background-size: 200% 200%;
             background-position: left center;
           }

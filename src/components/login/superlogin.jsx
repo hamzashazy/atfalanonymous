@@ -1,18 +1,21 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const Superlogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
-  const [loading, setLoading] = useState(false); // New state
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/admin";
+  // 👆 fallback to /dashboard if no "from" page
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setMessage("");
-    setLoading(true); // Disable button
+    setLoading(true);
 
     try {
       const response = await fetch(
@@ -30,7 +33,8 @@ const Superlogin = () => {
         localStorage.setItem("token", data.token);
         localStorage.setItem("isLogged", "true");
         setMessage("Login successful!");
-        setTimeout(() => navigate("/Superpanel"), 1000);
+        setTimeout(() => navigate("/admin"), 1000);
+        // ✅ Redirect back where user came from
       } else {
         setMessage(data.message || "Login failed");
       }
@@ -38,10 +42,9 @@ const Superlogin = () => {
       setMessage("An error occurred. Please try again.");
       console.error("Login error:", error);
     } finally {
-      setLoading(false); // Re-enable button after request
+      setLoading(false);
     }
   };
-
   return (
     <main className="flex justify-center items-center min-h-screen bg-gradient-to-br from-purple-200 via-pink-100 to-blue-100 px-4 overflow-hidden relative">
       {/* Floating background circles */}
@@ -68,7 +71,7 @@ const Superlogin = () => {
             </svg>
           </div>
           <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-1 text-center">
-            Super Admin Panel
+            Admin Panel
           </h1>
           <p className="text-gray-500 text-base sm:text-lg text-center">
             Sign in to manage your administrators
@@ -134,7 +137,7 @@ const Superlogin = () => {
 
         {/* Footer */}
         <p className="mt-6 text-gray-400 text-sm sm:text-base text-center">
-          © 2025 Albn Super Admin Panel
+          © 2025 hs Admin Panel
         </p>
       </div>
     </main>
