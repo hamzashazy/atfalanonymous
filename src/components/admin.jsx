@@ -41,7 +41,7 @@ const AdminViewMessages = () => {
       }
 
       const response = await fetch(
-        "https://atfalanonymous-backend.vercel.app/api/message/",
+        "https://hidely-backend.vercel.app/api/message/",
         {
           headers: {
             Authorization: `Bearer ${token}`,

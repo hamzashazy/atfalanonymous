@@ -1,3 +1,6 @@
+html {
+  font-size: 80% !important;
+}
 html.superpanel-page {
   font-size: 75% !important;
 }

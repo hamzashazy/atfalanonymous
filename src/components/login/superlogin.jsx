@@ -19,7 +19,7 @@ const Superlogin = () => {
 
     try {
       const response = await fetch(
-        "https://atfalanonymous-backend.vercel.app/api/superadmin/login",
+        "https://hidely-backend.vercel.app/api/superadmin/login",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
